@@ -11,6 +11,7 @@ export default class Pacman {
     this.pacmanAnimationTimerDefault = 10;
     this.pacmanAnimationTimer = null;
     this.pacmanRotation = this.Rotation.right;
+    this.wakaSound = new Audio("../sounds/waka.wav");
     document.addEventListener("keydown", this.#keydown);
     this.#loadPacmanImages();
   }
@@ -23,6 +24,7 @@ export default class Pacman {
   draw(ctx) {
     this.#move();
     this.#animate();
+    this.#eatDot();
     const size = this.tileSize / 2;
     ctx.save();
     ctx.translate(this.x + size, this.y + size);
@@ -154,6 +156,12 @@ export default class Pacman {
       if (this.pacmanImageIndex == this.pacmanImages.length) {
         this.pacmanImageIndex = 0;
       }
+    }
+  }
+  #eatDot() {
+    if (this.tileMap.eatDot(this.x, this.y)) {
+      //play sound
+      this.wakaSound.play();
     }
   }
 }
