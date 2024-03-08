@@ -6,11 +6,12 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const tileMap = new TileMap(tileSize);
 const pacman = tileMap.getPacman(velocity);
-
+const enemies = tileMap.getEnemies(velocity);
 function gameLoop() {
   // console.log("game loop");
   tileMap.draw(ctx);
   pacman.draw(ctx);
+  enemies.forEach((enemy) => enemy.draw(ctx));
 }
 
 tileMap.setCanvasSize(canvas);
