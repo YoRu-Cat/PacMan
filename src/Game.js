@@ -18,6 +18,7 @@ const gameWinSound = new Audio("sounds/gameWin.wav");
 function gameLoop() {
   // console.log("game loop");
   tileMap.draw(ctx);
+  drawGameEnd();
   pacman.draw(ctx, pause(), enemies);
   enemies.forEach((enemy) => enemy.draw(ctx, pause(), pacman));
   checkGameOver();
@@ -50,6 +51,24 @@ function isGameOver() {
 function pause() {
   return !pacman.madeFirstMove || gameOver || gameWin;
 }
+function drawGameEnd() {
+  if (gameOver || gameWin) {
+    let text = "You Win!";
+    if (gameOver) {
+      text = "Game Over!";
+    }
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, canvas.height / 3.2, canvas.width, 80);
 
+    ctx.font = "80px comic sans";
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    gradient.addColorStop("0", "purple");
+    gradient.addColorStop("0.5", "blue");
+    gradient.addColorStop("1.0", "purple");
+
+    ctx.fillStyle = "white";
+    ctx.fillText(text, 10, canvas.height / 2);
+  }
+}
 tileMap.setCanvasSize(canvas);
 setInterval(gameLoop, 1000 / 75);
