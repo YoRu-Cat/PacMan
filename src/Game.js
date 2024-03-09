@@ -11,7 +11,10 @@ function gameLoop() {
   // console.log("game loop");
   tileMap.draw(ctx);
   pacman.draw(ctx);
-  enemies.forEach((enemy) => enemy.draw(ctx));
+  enemies.forEach((enemy) => enemy.draw(ctx, pause()));
+}
+function pause() {
+  return !pacman.madeFirstMove;
 }
 
 tileMap.setCanvasSize(canvas);
