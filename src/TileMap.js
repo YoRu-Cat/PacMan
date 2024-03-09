@@ -14,6 +14,10 @@ export default class TileMap {
 
     this.pinkDot = new Image();
     this.pinkDot.src = "images/pinkDot.png";
+
+    this.powerDot = this.pinkDot;
+    this.powerDotAnimationTimerDefault = 25;
+    this.powerDotAnimationTimer = this.powerDotAnimationTimerDefault;
   }
 
   // 1 - walls
@@ -21,16 +25,17 @@ export default class TileMap {
   // 4 - pac-man
   // 5 - empty space
   // 6 - enemies
+  // 7 - power dot
 
   map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 1],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 7, 1],
     [1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
     [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
     [1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1],
-    [1, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1],
-    [1, 0, 1, 0, 1, 0, 4, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 0, 1, 0, 4, 0, 0, 0, 1, 7, 1],
     [1, 6, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1],
     [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -43,6 +48,8 @@ export default class TileMap {
           this.#drawWall(ctx, column, row, this.tileSize);
         } else if (tile === 0) {
           this.#drawDot(ctx, column, row, this.tileSize);
+        } else if (tile === 7) {
+          this.#drawPowerDot(ctx, column, row, this.tileSize);
         } else {
           this.#drawBlank(ctx, column, row, this.tileSize);
         }
@@ -73,6 +80,18 @@ export default class TileMap {
       size,
       size
     );
+  }
+  #drawPowerDot(ctx, column, row, size) {
+    this.powerDotAnimationTimer--;
+    if (this.powerDotAnimationTimer === 0) {
+      this.powerDotAnimationTimer = this.powerDotAnimationTimerDefault;
+      if (this.powerDot == this.pinkDot) {
+        this.powerDot = this.yellowDot;
+      } else {
+        this.powerDot = this.pinkDot;
+      }
+    }
+    ctx.drawImage(this.powerDot, column * size, row * size, size, size);
   }
   #drawBlank(ctx, column, row, size) {
     ctx.fillStyle = "black";
