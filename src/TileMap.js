@@ -193,4 +193,15 @@ export default class TileMap {
     }
     return false;
   }
+  eatPowerDot(x, y) {
+    const row = y / this.tileSize;
+    const column = x / this.tileSize;
+    if (Number.isInteger(row) && Number.isInteger(column)) {
+      if (this.map[row][column] === 7) {
+        this.map[row][column] = 5;
+        return true;
+      }
+    }
+    return false;
+  }
 }
