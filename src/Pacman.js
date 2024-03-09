@@ -1,3 +1,4 @@
+import Enemy from "./Enemy.js";
 import MovingDirection from "./MovingDirection.js";
 export default class Pacman {
   constructor(x, y, tileSize, velocity, tileMap) {
@@ -17,6 +18,7 @@ export default class Pacman {
 
     this.wakaSound = new Audio("sounds/waka.wav");
     this.powerDotSound = new Audio("sounds/power_dot.wav");
+    this.eatGhostSound = new Audio("sounds/eat_ghost.wav");
 
     this.powerDotActive = false;
     this.powerDotAboutToExpire = false;
@@ -32,11 +34,15 @@ export default class Pacman {
     left: 2,
     up: 3,
   };
-  draw(ctx) {
-    this.#move();
-    this.#animate();
+  draw(ctx, pause, enemies) {
+    if (!pause) {
+      this.#move();
+      this.#animate();
+    }
     this.#eatDot();
     this.#eatPowerDot();
+    this.#eatGhost(enemies);
+
     const size = this.tileSize / 2;
     ctx.save();
     ctx.translate(this.x + size, this.y + size);
@@ -196,6 +202,15 @@ export default class Pacman {
         this.powerDotAboutToExpire = true;
       }, 1000 * 3);
       this.timers.push(powerDotAboutToExpireTimer);
+    }
+  }
+  #eatGhost(enemies) {
+    if (this.powerDotActive) {
+      const collideEnemies = enemies.filter((enemy) => enemy.collideWith(this));
+      collideEnemies.forEach((enemy) => {
+        enemies.splice(enemies.indexOf(enemy), 1);
+        this.eatGhostSound.play();
+      });
     }
   }
 }
